@@ -52,7 +52,7 @@ public class Person {
             while((line = bufferedReader.readLine()) != null) {
        
             	if(!line.isEmpty()) {
-            		if(line.length()==2)
+            		if(line.length()==2 || line.length()==3)
             			key = line;            		
             		else
             			if(key!=null)
@@ -66,7 +66,8 @@ public class Person {
             		}
             	}
             	
-            }   
+            }
+            map.put(key, values); //To push the last value of the text file
      
             // Always close files.
             bufferedReader.close();         
