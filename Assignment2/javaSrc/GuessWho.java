@@ -11,6 +11,7 @@ import java.lang.String;
  */
 public class GuessWho
 {
+	static String guessPlayer ; //player to be guessed
     /** Name of class, used in error messages. */
 	protected static final String progName = "GuessWho";
 
@@ -142,10 +143,11 @@ public class GuessWho
             // return true (to prevent infinite loop), so game ends after 1 round
             // as tie.
             int round = 1;
-            while (!player1Finished && !player2Finished) {
+            while (!player1Finished && !player2Finished) {            	
+            	guessPlayer = player2AssignedName;
                 log.add("Round " + round);
                 // player 1 makes a guess
-                System.out.println("Player1" + round + "Guess");
+                System.out.println("Player1 " + "round : "+round +  " Guess");
                 Guess currGuess = player1.guess();
                 log.add("Player 1 guessing " + currGuess);
                 // player 2 responds to guess
@@ -159,7 +161,8 @@ public class GuessWho
                 player1Finished = player1.receiveAnswer(currGuess, currAnswer);
 
                 // player 2's turn
-                System.out.println("Player2" + round + "Guess");
+                guessPlayer = player1AssignedName;
+                System.out.println("Player1 " + "round : "+round +  " Guess");
                 currGuess = player2.guess();
                 log.add("Player 2 guessing " + currGuess);
                 // player 1 responds to guess

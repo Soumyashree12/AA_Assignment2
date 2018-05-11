@@ -22,12 +22,15 @@ public class RandomGuessPlayer implements Player
 	String chosenName;
 	String attributeRandom;
 	String valueRandom;
+	static String guessedPerson;
 	static  String S; // The union of attribute and value pair
 
 	Guess g = new Guess();
 	GuessWho gw = new GuessWho();
 	String input; //input guess type
-	Guess guessVal;
+	static int size =0; //size of each maps
+	static String lastKey; //last key value of each map
+	static Guess guessVal;
 
 	static boolean val = true;
 	Random random = new Random();
@@ -36,6 +39,7 @@ public class RandomGuessPlayer implements Player
 	//Creating two new maps for player1 and player2 to keep the modified data of players
 	static Map<String, Collection<String>> mapPlayer1 = new HashMap<String, Collection<String>>();
 	static Map<String, Collection<String>> mapPlayer2 = new HashMap<String, Collection<String>>();
+	
 
 	/**
 	 * Loads the game configuration from gameFilename, and also store the chosen
@@ -53,21 +57,16 @@ public class RandomGuessPlayer implements Player
 	{
 		this.chosenName = chosenName;
 		p.personData(gameFilename);
+		
 
 		//Copy the whole palyer data in two maps
 		mapPlayer1.putAll(p.map); 
 		mapPlayer2.putAll(p.map);
-		
-
-		/*	//Assign the chosen person in a new map for future reference
-		if(p.map.containsKey(chosenName)) {
-			choosenPersonData.put(chosenName, p.map.get(chosenName));
-		}*/
 
 
 	} // end of RandomGuessPlayer()
 	public RandomGuessPlayer() {
-		
+
 	}
 
 
@@ -77,21 +76,23 @@ public class RandomGuessPlayer implements Player
 		input = sc.next();
 		switch(input) {
 		case "AV" : randomSelection(); //Call the random selection method
-		guessVal =  new Guess(Guess.GuessType.Attribute, attributeRandom, valueRandom);
-		guessVal.mAttribute.concat(" "+guessVal.getValue());
-
-		break;
-		case "P" : guessVal =  new Guess(Guess.GuessType.Person, "", chosenName);
-		break;
-		default : break;
+						guessVal =  new Guess(Guess.GuessType.Attribute, attributeRandom, valueRandom);
+						guessVal.mAttribute.concat(" "+guessVal.getValue());
+						break;
+		case "P" : System.out.println("Enter the person guess");
+					   guessedPerson = sc.next();		
+						guessVal =  new Guess(Guess.GuessType.Person, "", guessedPerson);
+					  break;
+		default : 
+					 break;
 
 		}
 		return guessVal;    	
 	} // end of guess()
 
-
 	public boolean answer(Guess currGuess) {
-		System.out.println("current guess" + currGuess);
+		//System.out.println("current guess" + currGuess);
+		if(guessVal.getType().toString().equals("Attribute")) {
 		List<String> list = new ArrayList<String>(p.map.get(chosenName));
 		//Checking if the guess present in the list
 		for(int i=0;i<list.size();i++) {
@@ -100,91 +101,111 @@ public class RandomGuessPlayer implements Player
 				break;
 			}
 			else {
-
 				val= false;
 			}
 		}
-		
+		}
+		else if(guessVal.getType().toString().equals("Person")) {
+			
+			if(guessedPerson.equals(gw.guessPlayer)) {
+				
+				val=true;
+			}
+			else
+				val = false;
+			
+		}
 		return val;
 	} // end of answer()
 
-
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
-		
-		// placeholder, replace
-		return true;
+		boolean finalAnswer = true;
+		//System.out.println("guessed" + guessedPerson + "orginal" + gw.guessPlayer);
+		if(guessVal.getType().toString().equals("Person")) {
+		if(val == true) {
+			finalAnswer=true;
+		}
+		else
+			finalAnswer = false;
+		}
+		else if(size == 1 && lastKey.equals(gw.guessPlayer)) {
+			finalAnswer = true;
+		}
+		else {
+			finalAnswer = false;
+		}
+		return finalAnswer;
 	} // end of receiveAnswer()
 
 	//Selecting random data
 	public String randomSelection() {
 
 		attributeRandom = p.attri.get(random.nextInt(p.attri.size())); //Get the random attribute
-		//System.out.println("attribute" + attributeRandom);
 		int index = p.attri.indexOf(attributeRandom); //Index of the random attribute
-
-		//System.out.println("index" + index);
-
 		String[] subVal = p.val.get(index).split(" "); 
 		valueRandom =subVal[random.nextInt(subVal.length)]; //Get the random value
-		//System.out.println("Value" + valueRandom);
-
 		//Get the attribute and value pair
 		S = attributeRandom.concat(" " + valueRandom);
-
 		return S;
 	}
+
+	//Eliminate player1 data with each round
 	public void player1Status() {
+		Iterator<Map.Entry<String,Collection<String>>> iter = mapPlayer1.entrySet().iterator();
 		if(val == true) {	
-		
-			Iterator<Map.Entry<String,Collection<String>>> iter = mapPlayer1.entrySet().iterator();
 			while (iter.hasNext()) {
 				Map.Entry<String,Collection<String>> entry = iter.next();
 				if(!entry.getValue().contains(S)){
 					iter.remove();
 				}
 			}
-			
-			for(Map.Entry<String, Collection<String>> entry : mapPlayer1.entrySet())
-				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());
+
+			/*for(Map.Entry<String, Collection<String>> entry : mapPlayer1.entrySet())
+				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 		}
 		else {
-			Iterator<Map.Entry<String,Collection<String>>> iter = mapPlayer1.entrySet().iterator();		
 			while (iter.hasNext()) {
 				Map.Entry<String,Collection<String>> entry = iter.next();
 				if(entry.getValue().contains(S)){
 					iter.remove();
 				}
 			}
-			for(Map.Entry<String, Collection<String>> entry : mapPlayer1.entrySet())
-				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());
+			/*for(Map.Entry<String, Collection<String>> entry : mapPlayer1.entrySet())
+				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 		}
-			
-		
+		size = mapPlayer1.size();
+		if(size ==1) {
+			lastKey = iter.next().getKey();
+		}
 	}
-		
-		public void player2Status() {
-			Iterator<Map.Entry<String,Collection<String>>> iter = mapPlayer2.entrySet().iterator();
-		 if(val == true){
+	//Eliminate player2 data with each round
+	public void player2Status() {
+		Iterator<Map.Entry<String,Collection<String>>> iter = mapPlayer2.entrySet().iterator();
+		if(val == true){
 			while (iter.hasNext()) {
 				Map.Entry<String,Collection<String>> entry = iter.next();
 				if(!entry.getValue().contains(S)){
 					iter.remove();
 				}
 			}
-			for(Map.Entry<String, Collection<String>> entry : mapPlayer2.entrySet())
-				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());
+			/*for(Map.Entry<String, Collection<String>> entry : mapPlayer2.entrySet())
+				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 		}
-		 else {
-			 while (iter.hasNext()) {
-					Map.Entry<String,Collection<String>> entry = iter.next();
-					if(entry.getValue().contains(S)){
-						iter.remove();
-					}
+		else {
+			while (iter.hasNext()) {
+				Map.Entry<String,Collection<String>> entry = iter.next();
+				if(entry.getValue().contains(S)){
+					iter.remove();
 				}
-				for(Map.Entry<String, Collection<String>> entry : mapPlayer2.entrySet())
-					System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());
 			}
-				
+			/*for(Map.Entry<String, Collection<String>> entry : mapPlayer2.entrySet())
+				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 		}
-	
+		size = mapPlayer2.size();
+		if(size ==1) {
+			lastKey = iter.next().getKey();
+		}
+			
+	}
+
 } // end of class RandomGuessPlayer
