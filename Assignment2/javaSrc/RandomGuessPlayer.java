@@ -39,7 +39,7 @@ public class RandomGuessPlayer implements Player
 	//Creating two new maps for player1 and player2 to keep the modified data of players
 	static Map<String, Collection<String>> mapPlayer1 = new HashMap<String, Collection<String>>();
 	static Map<String, Collection<String>> mapPlayer2 = new HashMap<String, Collection<String>>();
-	
+
 
 	/**
 	 * Loads the game configuration from gameFilename, and also store the chosen
@@ -57,7 +57,7 @@ public class RandomGuessPlayer implements Player
 	{
 		this.chosenName = chosenName;
 		p.personData(gameFilename);
-		
+
 
 		//Copy the whole palyer data in two maps
 		mapPlayer1.putAll(p.map); 
@@ -76,15 +76,15 @@ public class RandomGuessPlayer implements Player
 		input = sc.next();
 		switch(input) {
 		case "AV" : randomSelection(); //Call the random selection method
-						guessVal =  new Guess(Guess.GuessType.Attribute, attributeRandom, valueRandom);
-						guessVal.mAttribute.concat(" "+guessVal.getValue());
-						break;
+		guessVal =  new Guess(Guess.GuessType.Attribute, attributeRandom, valueRandom);
+		guessVal.mAttribute.concat(" "+guessVal.getValue());
+		break;
 		case "P" : System.out.println("Enter the person guess");
-					   guessedPerson = sc.next();		
-						guessVal =  new Guess(Guess.GuessType.Person, "", guessedPerson);
-					  break;
+		guessedPerson = sc.next();		
+		guessVal =  new Guess(Guess.GuessType.Person, "", guessedPerson);
+		break;
 		default : 
-					 break;
+			break;
 
 		}
 		return guessVal;    	
@@ -93,45 +93,49 @@ public class RandomGuessPlayer implements Player
 	public boolean answer(Guess currGuess) {
 		//System.out.println("current guess" + currGuess);
 		if(guessVal.getType().toString().equals("Attribute")) {
-		List<String> list = new ArrayList<String>(p.map.get(chosenName));
-		//Checking if the guess present in the list
-		for(int i=0;i<list.size();i++) {
-			if(("Attribute ").concat(list.get(i)).equals(currGuess.toString())){
-				val= true;
-				break;
+			List<String> list = new ArrayList<String>(p.map.get(chosenName));
+			//Checking if the guess present in the list
+			for(int i=0;i<list.size();i++) {
+				if(("Attribute ").concat(list.get(i)).equals(currGuess.toString())){
+					val= true;
+					break;
+				}
+				else {
+					val= false;
+				}
 			}
-			else {
-				val= false;
-			}
-		}
 		}
 		else if(guessVal.getType().toString().equals("Person")) {
-			
+
 			if(guessedPerson.equals(gw.guessPlayer)) {
-				
+
 				val=true;
 			}
 			else
 				val = false;
-			
+
 		}
 		return val;
 	} // end of answer()
 
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
 		boolean finalAnswer = true;
+		System.out.println("Size" + size);
 		//System.out.println("guessed" + guessedPerson + "orginal" + gw.guessPlayer);
 		if(guessVal.getType().toString().equals("Person")) {
-		if(val == true) {
-			finalAnswer=true;
+			if(val == true) {
+				System.out.println("Enter 1");
+				finalAnswer=true;
+			}
+			else
+				finalAnswer = false;
 		}
-		else
-			finalAnswer = false;
-		}
-		else if(size == 1 && lastKey.equals(gw.guessPlayer)) {
+		else if(size == 1 ) {
+			System.out.println("Enter 2");
 			finalAnswer = true;
 		}
 		else {
+			System.out.println("Eneter3");
 			finalAnswer = false;
 		}
 		return finalAnswer;
@@ -159,8 +163,8 @@ public class RandomGuessPlayer implements Player
 					iter.remove();
 				}
 			}
-
-			/*for(Map.Entry<String, Collection<String>> entry : mapPlayer1.entrySet())
+			/*
+			for(Map.Entry<String, Collection<String>> entry : mapPlayer1.entrySet())
 				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 		}
 		else {
@@ -174,12 +178,13 @@ public class RandomGuessPlayer implements Player
 				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 		}
 		size = mapPlayer1.size();
-		if(size ==1) {
+		/*if(size ==1) {
 			lastKey = iter.next().getKey();
-		}
+		}*/
 	}
 	//Eliminate player2 data with each round
 	public void player2Status() {
+
 		Iterator<Map.Entry<String,Collection<String>>> iter = mapPlayer2.entrySet().iterator();
 		if(val == true){
 			while (iter.hasNext()) {
@@ -188,7 +193,7 @@ public class RandomGuessPlayer implements Player
 					iter.remove();
 				}
 			}
-			/*for(Map.Entry<String, Collection<String>> entry : mapPlayer2.entrySet())
+			/*	for(Map.Entry<String, Collection<String>> entry : mapPlayer2.entrySet())
 				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 		}
 		else {
@@ -202,10 +207,10 @@ public class RandomGuessPlayer implements Player
 				System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 		}
 		size = mapPlayer2.size();
-		if(size ==1) {
+		/*if(size ==1) {
 			lastKey = iter.next().getKey();
-		}
-			
+		}*/
+
 	}
 
 } // end of class RandomGuessPlayer
