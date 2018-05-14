@@ -120,22 +120,19 @@ public class RandomGuessPlayer implements Player
 
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
 		boolean finalAnswer = true;
-		System.out.println("Size" + size);
+	//	System.out.println("Size" + size);
 		//System.out.println("guessed" + guessedPerson + "orginal" + gw.guessPlayer);
 		if(guessVal.getType().toString().equals("Person")) {
 			if(val == true) {
-				System.out.println("Enter 1");
 				finalAnswer=true;
 			}
 			else
 				finalAnswer = false;
 		}
 		else if(size == 1 ) {
-			System.out.println("Enter 2");
 			finalAnswer = true;
 		}
 		else {
-			System.out.println("Eneter3");
 			finalAnswer = false;
 		}
 		return finalAnswer;
