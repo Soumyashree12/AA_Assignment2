@@ -65,10 +65,11 @@ public class RandomGuessPlayer implements Player
 
 
 	} // end of RandomGuessPlayer()
+	
+	//Constructor
 	public RandomGuessPlayer() {
 
 	}
-
 
 	public Guess guess() {
 
@@ -85,7 +86,6 @@ public class RandomGuessPlayer implements Player
 		break;
 		default : 
 			break;
-
 		}
 		return guessVal;    	
 	} // end of guess()

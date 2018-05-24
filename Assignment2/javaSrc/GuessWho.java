@@ -15,6 +15,7 @@ public class GuessWho
     /** Name of class, used in error messages. */
 	protected static final String progName = "GuessWho";
 
+
     /**
 	 * Print help/usage message.
 	 */
@@ -29,7 +30,9 @@ public class GuessWho
      * Main method.
      */
     public static void main(String[] args) {
+    	Person p = new Person();
     	RandomGuessPlayer rp = new RandomGuessPlayer();
+    	BinaryGuessPlayer bp = new BinaryGuessPlayer();
         //
         // parse command line options
         //
@@ -114,13 +117,13 @@ public class GuessWho
                     break;
                 // Task C (binary search based guessing player)
                 case "binary":
-                    player2 = new BinaryGuessPlayer(gameFilename, player2AssignedName);
+                    player2 = new BinaryGuessPlayer(gameFilename, player2AssignedName);                    
                     break;
                 default:
                     System.err.println("Uknown player 2 type option: " + player2Type);
                     usage();
             }
-
+            
 
             //
             // Game logger
@@ -143,32 +146,43 @@ public class GuessWho
             // return true (to prevent infinite loop), so game ends after 1 round
             // as tie.
             int round = 1;
-            while (!player1Finished && !player2Finished) {            	
+            while (!player1Finished && !player2Finished) { 
+            	// ------------------------player 1 makes a guess----------------------------------------------------
+            	if(player1Type.equals("binary"))
+            		bp.bmapPlayer1();
             	guessPlayer = player2AssignedName;
                 log.add("Round " + round);
-                // player 1 makes a guess
-                System.out.println("Player1 " + "round : "+round +  " Guess");
                 Guess currGuess = player1.guess();
                 log.add("Player 1 guessing " + currGuess);
                 // player 2 responds to guess
                 boolean currAnswer = player2.answer(currGuess);
                 log.add("Player 2 answering " + currAnswer);
-                rp.player1Status();
                 
+                if(player1Type.equals("random"))
+                	rp.player1Status();
+                else {
+                	bp.player1Status();
+                }
                 // player 1 receives response and updates own status
                 // If player 1 made a person guess and it was correct, player1Finished should be true;
                 // otherwise be false.
                 player1Finished = player1.receiveAnswer(currGuess, currAnswer);
 
-                // player 2's turn
+                
+                //---------------------------- player 2's turn-----------------------------------------------
+                if(player2Type.equals("binary"))
+            		bp.bmapPlayer2();
                 guessPlayer = player1AssignedName;
-                System.out.println("Player1 " + "round : "+round +  " Guess");
                 currGuess = player2.guess();
                 log.add("Player 2 guessing " + currGuess);
                 // player 1 responds to guess
                 currAnswer = player1.answer(currGuess);
                 log.add("Player 1 answering " + currAnswer);
-                rp.player2Status();
+                
+                if(player2Type.equals("random"))
+                	rp.player2Status();
+                else
+                	bp.player2Status();
                 // player 2 receives response and updates own status
                 // If player 2 made a person guess and it was correct, player2Finished should be true;
                 // otherwise be false
