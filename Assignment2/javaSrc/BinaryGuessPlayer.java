@@ -34,15 +34,16 @@ public class BinaryGuessPlayer implements Player
 	RandomGuessPlayer rg = new RandomGuessPlayer();
 	String chosenName;
 	static String value;
-	static boolean bval = true;
+	//static boolean val = true;
 	static Map<String, Collection<String>> bmapPlayer1 = new HashMap<String, Collection<String>>();
 	static Map<String, Collection<String>> bmapPlayer2 = new HashMap<String, Collection<String>>();
-	ArrayList<Integer> bcountMatrix = new ArrayList<Integer>(); //store all the counts of attributes 
+	 ArrayList<Integer> bcountMatrix = new ArrayList<Integer>(); //store all the counts of attributes 
 	//ArrayList<Integer> countMatrix = new ArrayList<Integer>(); //store all the counts of attributes 
 	
 	
 	static String bguessedPerson;
 	static int bsize =0;
+	
 	
 	public BinaryGuessPlayer() {
 		
@@ -62,10 +63,9 @@ public class BinaryGuessPlayer implements Player
     	if(bsize !=1) {
     		rg.guessVal = new Guess(Guess.GuessType.Attribute, value,"");
     	}
-    	else {
-    		rg.guessVal = new Guess(Guess.GuessType.Person,"",bguessedPerson); //Havent defined yet
+    	else if(bsize ==1) {
+    		rg.guessVal = new Guess(Guess.GuessType.Person,"",bguessedPerson); 
     	}
-    	System.out.println("hgtyhu" + rg.guessVal);
         // placeholder, replace
         return rg.guessVal;
     } // end of guess()
@@ -76,31 +76,31 @@ public class BinaryGuessPlayer implements Player
 			List<String> list = new ArrayList<String>(p.map.get(chosenName));
 			//Checking if the guess present in the list
 			for(int i=0;i<list.size();i++) {
-				if(("Attribute ").concat(list.get(i)).equals(currGuess.toString().trim())){
-					bval= true;
+				if(("Attribute ").concat(list.get(i)).trim().equals(currGuess.toString().trim())){
+					rg.val= true;
 					break;
 				}
 				else {
-					bval= false;
+					rg.val= false;
 				}
 			}
 		}
 		else if(rg.guessVal.getType().toString().equals("Person")) {
-
-			if(bguessedPerson.equals(gw.guessPlayer)) {
-				bval=true;
+			bguessedPerson = currGuess.toString();
+			if(bguessedPerson.trim().equals("Person".concat("  ").concat(gw.guessPlayer))) {
+				rg.val=true;
 			}
 			else
-				bval = false;
+				rg.val = false;
 		}
-		return bval;
+		return rg.val;
     } // end of answer()
 
 
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
 		boolean finalAnswer = true;
         if(rg.guessVal.getType().toString().equals("Person")) {
-			if(bval == true) {
+			if (rg.val == true) {
 				finalAnswer=true;
 			}
 			else
@@ -112,90 +112,89 @@ public class BinaryGuessPlayer implements Player
 		else {
 			finalAnswer = false;
 		}
-        bcountMatrix.clear();
+        
+      //  bcountMatrix.clear();
+        
 		return finalAnswer;
     } // end of receiveAnswer()
 	
 	public void bmapPlayer1() {
-		dividedList(bmapPlayer1);
-		bsize = bmapPlayer1.size();
+		listofCounts(bmapPlayer1);
+		bsize = bmapPlayer1.size(); //Original map1 size
 	}
 	public void bmapPlayer2() {	
-		dividedList(bmapPlayer2);
-		bsize = bmapPlayer2.size();
+		listofCounts(bmapPlayer2);
+		bsize = bmapPlayer2.size(); //Original map2 size
 	}
-public void player1Status() {
+public void bplayer1Status() {
 		
 	Iterator<Map.Entry<String,Collection<String>>> iter = bmapPlayer1.entrySet().iterator();
-	if(bval == true) {	
+	if(rg.val == true) {	
+		
 		while (iter.hasNext()) {
 			Map.Entry<String,Collection<String>> entry = iter.next();
 			if(!entry.getValue().toString().contains(value)){
+				
 				iter.remove();
 			}
 		}
 		
-		for(Map.Entry<String, Collection<String>> entry : bmapPlayer1.entrySet())
-			System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());
+		/*for(Map.Entry<String, Collection<String>> entry : bmapPlayer1.entrySet())
+			System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 	}
 	else {
 		while (iter.hasNext()) {
 			Map.Entry<String,Collection<String>> entry = iter.next();
-			if(entry.getValue().contains(rg.guessVal)){
+			if(entry.getValue().contains(value)){
 				iter.remove();
 			}
 		}
-		for(Map.Entry<String, Collection<String>> entry : bmapPlayer1.entrySet())
-			System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());
+	/*	for(Map.Entry<String, Collection<String>> entry : bmapPlayer1.entrySet())
+			System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 	}
 	bsize = bmapPlayer1.size();
-
-		
+	bcountMatrix.clear();
 		
 	}
-public void player2Status() {
+public void bplayer2Status() {
 	
 
 	Iterator<Map.Entry<String,Collection<String>>> iter = bmapPlayer2.entrySet().iterator();
-	if(bval == true) {	
+	if(rg.val == true) {	
 		while (iter.hasNext()) {
 			Map.Entry<String,Collection<String>> entry = iter.next();
-			if(!entry.getValue().contains(rg.guessVal)){
+			if(!entry.getValue().contains(value)){
 				iter.remove();
 			}
 		}
 		/*
-		for(Map.Entry<String, Collection<String>> entry : mapPlayer1.entrySet())
+		for(Map.Entry<String, Collection<String>> entry : bmapPlayer2.entrySet())
 			System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 	}
 	else {
 		while (iter.hasNext()) {
 			Map.Entry<String,Collection<String>> entry = iter.next();
-			if(entry.getValue().contains(rg.guessVal)){
+			if(entry.getValue().contains(value)){
 				iter.remove();
 			}
 		}
-		/*for(Map.Entry<String, Collection<String>> entry : mapPlayer1.entrySet())
+		/*for(Map.Entry<String, Collection<String>> entry : bmapPlayer2.entrySet())
 			System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());*/
 	}
 	bsize = bmapPlayer2.size();
-	
-	
-	
-	
-
+	bcountMatrix.clear();
 }
 
 	//count the number of attribute,value pair in the new divided list
-	public String dividedList(Map<String, Collection<String>> map) {
+	public String listofCounts(Map<String, Collection<String>> map) {
 		
 		countList(map);
 				
 		int bmapSize = map.size()/2;
 		int inc = bmapSize+1;
 		int dec = bmapSize-1;
-		System.out.println("bcountmax" + bcountMatrix);
-		System.out.println("bmapsize " + bmapSize);
+		//System.out.println("bcountmax" + bcountMatrix);
+		//System.out.println("bmapsize " + bmapSize);
 		
 		while(bmapSize!=0) {
 		if(bcountMatrix.contains(bmapSize)) {
@@ -214,8 +213,7 @@ public void player2Status() {
 		dec--;		
 		}
 		
-		
-		
+
 		
 		return value;
 	}

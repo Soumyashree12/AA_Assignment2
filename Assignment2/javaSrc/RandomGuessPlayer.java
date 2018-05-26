@@ -26,7 +26,7 @@ public class RandomGuessPlayer implements Player
 	static  String S; // The union of attribute and value pair
 
 	Guess g = new Guess();
-	GuessWho gw = new GuessWho();
+	GuessWho gw = new GuessWho(); 
 	String input; //input guess type
 	static int size =0; //size of each maps
 	static String lastKey; //last key value of each map
@@ -65,7 +65,7 @@ public class RandomGuessPlayer implements Player
 
 
 	} // end of RandomGuessPlayer()
-	
+
 	//Constructor
 	public RandomGuessPlayer() {
 
@@ -73,7 +73,19 @@ public class RandomGuessPlayer implements Player
 
 	public Guess guess() {
 
-		System.out.println("Mention the guess type <Attribute,Val>(AV)/<Person>(P)");
+		String gauge = null ;
+		gauge = randomInput();
+		if(gauge.equals("Person")  ) {
+			guessedPerson = playerRandSelection();
+			guessVal =  new Guess(Guess.GuessType.Person, "", guessedPerson);
+			//System.out.println(playerRandSelection());
+		}
+		else if (gauge.equals("Attribute")) {
+			randomSelection(); //Call the random selection method
+			guessVal =  new Guess(Guess.GuessType.Attribute, attributeRandom, valueRandom);
+			
+		}
+		/*	System.out.println("Mention the guess type <Attribute,Val>(AV)/<Person>(P)");
 		input = sc.next();
 		switch(input) {
 		case "AV" : randomSelection(); //Call the random selection method
@@ -86,9 +98,11 @@ public class RandomGuessPlayer implements Player
 		break;
 		default : 
 			break;
-		}
+		}*/
 		return guessVal;    	
 	} // end of guess()
+
+
 
 	public boolean answer(Guess currGuess) {
 		//System.out.println("current guess" + currGuess);
@@ -106,37 +120,49 @@ public class RandomGuessPlayer implements Player
 			}
 		}
 		else if(guessVal.getType().toString().equals("Person")) {
-
 			if(guessedPerson.equals(gw.guessPlayer)) {
-
 				val=true;
 			}
 			else
 				val = false;
-
 		}
 		return val;
 	} // end of answer()
 
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
 		boolean finalAnswer = true;
-	//	System.out.println("Size" + size);
+		//	System.out.println("Size" + size);
 		//System.out.println("guessed" + guessedPerson + "orginal" + gw.guessPlayer);
 		if(guessVal.getType().toString().equals("Person")) {
 			if(val == true) {
 				finalAnswer=true;
-			}
-			else
+			}else
 				finalAnswer = false;
-		}
-		else if(size == 1 ) {
+		}else if(size == 1 ) {
 			finalAnswer = true;
-		}
-		else {
+		}else{
 			finalAnswer = false;
 		}
 		return finalAnswer;
-	} // end of receiveAnswer()
+	} 
+
+	public String playerRandSelection() {
+
+		String randomPerson;
+		randomPerson = (String) p.map.keySet().toArray()[new Random().nextInt(p.map.keySet().toArray().length)];
+		return randomPerson;
+
+	}
+
+
+	public String randomInput() {
+		String randomAttribute ;
+		String[] inputType = new String [] {"Attribute","Person"};
+		Random rand = new Random();
+		randomAttribute = inputType[(int)(Math.random() * inputType.length)];
+		return randomAttribute;
+
+	}
 
 	//Selecting random data
 	public String randomSelection() {
@@ -147,7 +173,7 @@ public class RandomGuessPlayer implements Player
 		valueRandom =subVal[random.nextInt(subVal.length)]; //Get the random value
 		//Get the attribute and value pair
 		S = attributeRandom.concat(" " + valueRandom);
-		return S;
+		return S;	
 	}
 
 	//Eliminate player1 data with each round

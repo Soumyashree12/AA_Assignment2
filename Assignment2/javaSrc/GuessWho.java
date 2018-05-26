@@ -152,6 +152,7 @@ public class GuessWho
             		bp.bmapPlayer1();
             	guessPlayer = player2AssignedName;
                 log.add("Round " + round);
+                System.out.println("PLAYER1 GUESSING");
                 Guess currGuess = player1.guess();
                 log.add("Player 1 guessing " + currGuess);
                 // player 2 responds to guess
@@ -161,7 +162,7 @@ public class GuessWho
                 if(player1Type.equals("random"))
                 	rp.player1Status();
                 else {
-                	bp.player1Status();
+                	bp.bplayer1Status();
                 }
                 // player 1 receives response and updates own status
                 // If player 1 made a person guess and it was correct, player1Finished should be true;
@@ -170,6 +171,7 @@ public class GuessWho
 
                 
                 //---------------------------- player 2's turn-----------------------------------------------
+                System.out.println("PLAYER2 GUESSING");
                 if(player2Type.equals("binary"))
             		bp.bmapPlayer2();
                 guessPlayer = player1AssignedName;
@@ -182,7 +184,7 @@ public class GuessWho
                 if(player2Type.equals("random"))
                 	rp.player2Status();
                 else
-                	bp.player2Status();
+                	bp.bplayer2Status();
                 // player 2 receives response and updates own status
                 // If player 2 made a person guess and it was correct, player2Finished should be true;
                 // otherwise be false
