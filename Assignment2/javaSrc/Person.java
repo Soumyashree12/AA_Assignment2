@@ -13,22 +13,17 @@ public class Person {
 	ArrayList<String> attri = new ArrayList<String>(); //Store only the attributes
 	ArrayList<String> val = new ArrayList<String>(); //Store only the values
 	static ArrayList<String> dataset = new ArrayList<String>(); //store the value of all possible attributes
-	
-
 	Map<String, Collection<String>> map = new HashMap<String, Collection<String>>();
 	static int c=1; //helps the dataset to be executed only once in the whole program
 	public Map<String,Collection<String>> personData (String gameFilename) {
-
-		// The name of the file to open.
-		String fileName = gameFilename;
-
+	String fileName = gameFilename;// The name of the file to open.
 		// This will reference one line at a time
 		String line = null;
 		String key = null;
 
 		try {
-			// FileReader reads text files in the default encoding.
-			FileReader fileReader = new FileReader(fileName);
+
+			FileReader fileReader = new FileReader(fileName); // FileReader reads text files in the default encoding.
 
 			// Always wrap FileReader in BufferedReader.
 			BufferedReader bufferedReader = 
@@ -36,14 +31,11 @@ public class Person {
 			ArrayList<String> values = new ArrayList<String>();
 
 			//To store the attribute and Values in the map
-
 			while ((line = bufferedReader.readLine()) != null) {
 				if(!line.isEmpty()) {
 					String parts[] = line.split(" ",2);
-					//    attriVal.put(parts[0], parts[1]);
 					attri.add(parts[0]);
 					val.add(parts[1]);
-					//  	System.out.println(attriVal.toString());
 				}
 				else
 					break;
@@ -51,7 +43,6 @@ public class Person {
 
 			// To store the person information in the map
 			while((line = bufferedReader.readLine()) != null) {
-
 				if(!line.isEmpty()) {
 					if(line.length()==2 || line.length()==3)
 						key = line;            		
@@ -66,30 +57,25 @@ public class Person {
 						values = new ArrayList<String>();
 					}
 				}
-
 			}
+
 			map.put(key, values); //To push the last value of the text file
-			
 			if(c==1) {
 				Iterator<String> itr = val.iterator();
 				int attriIndex =0; //Each attribute index number
-			
+
 				while (itr.hasNext()){
 					String array = itr.next(); 
 					String[] splitStr;
 					splitStr = array.split("\\s+");
-
 					for(int i=0;i<splitStr.length;i++) {
 						String comb = attri.get(attriIndex).concat(" ").concat(splitStr[i]);
-
 						dataset.add(comb);
 					}
 					attriIndex ++;
 				}
 				c++;
 			}
-			
-			
 			// Always close files.
 			bufferedReader.close();         
 		}
@@ -105,10 +91,5 @@ public class Person {
 		}
 		return map;
 	}
-	
-	/*--------------------------------------------------------For Binary data store ---------------------------------------------------------*/
-	
-	
-
-}
+}// End of the Person class
 
