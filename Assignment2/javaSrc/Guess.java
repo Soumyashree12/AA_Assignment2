@@ -59,6 +59,10 @@ public class Guess
 	public GuessType getType() {
 		return mType;
 	} // end of getType()
+	
+	public void  setType(GuessType type) {
+		
+	} 
 
 
 	/**
