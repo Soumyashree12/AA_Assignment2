@@ -10,13 +10,14 @@ import java.io.*;
 
 public class Person {
 
-	ArrayList<String> attri = new ArrayList<String>(); //Store only the attributes
-	ArrayList<String> val = new ArrayList<String>(); //Store only the values
-	static ArrayList<String> dataset = new ArrayList<String>(); //store the value of all possible attributes
-	Map<String, Collection<String>> map = new HashMap<String, Collection<String>>();
-	static int c=1; //helps the dataset to be executed only once in the whole program
-	public Map<String,Collection<String>> personData (String gameFilename) {
-	String fileName = gameFilename;// The name of the file to open.
+	   ArrayList<String> attri = new ArrayList<String>(); //Store only the attributes
+	   ArrayList<String> val = new ArrayList<String>(); //Store only the values
+	   static ArrayList<String> dataset = new ArrayList<String>(); //store the value of all possible attributes
+	   Map<String, Collection<String>> map = new HashMap<String, Collection<String>>();
+	   static int c=1; //helps the dataset to be executed only once in the whole program
+	   
+	   public Map<String,Collection<String>> personData (String gameFilename) {
+		String fileName = gameFilename;// The name of the file to open.
 		// This will reference one line at a time
 		String line = null;
 		String key = null;
@@ -26,8 +27,7 @@ public class Person {
 			FileReader fileReader = new FileReader(fileName); // FileReader reads text files in the default encoding.
 
 			// Always wrap FileReader in BufferedReader.
-			BufferedReader bufferedReader = 
-					new BufferedReader(fileReader);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			ArrayList<String> values = new ArrayList<String>();
 
 			//To store the attribute and Values in the map
@@ -80,14 +80,10 @@ public class Person {
 			bufferedReader.close();         
 		}
 		catch(FileNotFoundException ex) {
-			System.out.println(
-					"Unable to open file '" + 
-							fileName + "'");                
+			System.out.println("Unable to open file '" + 	fileName + "'");                
 		}
 		catch(IOException ex) {
-			System.out.println(
-					"Error reading file '" 
-							+ fileName + "'");                  
+			System.out.println("Error reading file '" + fileName + "'");                  
 		}
 		return map;
 	}

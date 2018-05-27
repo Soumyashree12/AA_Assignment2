@@ -32,7 +32,7 @@ public class RandomGuessPlayer implements Player
 	static Guess guessVal;
 	static boolean val = true;
 	Random random = new Random();
-	
+
 	//Creating two new maps for player1 and player2 to keep the modified data of players
 	static Map<String, Collection<String>> mapPlayer1 = new HashMap<String, Collection<String>>();
 	static Map<String, Collection<String>> mapPlayer2 = new HashMap<String, Collection<String>>();
@@ -67,7 +67,7 @@ public class RandomGuessPlayer implements Player
 	public Guess guess() {
 		String gauge = null ;
 		gauge = randomInput();
-		
+
 		if(gauge.equals("Person")  ) {
 			guessedPerson = playerRandSelection();
 			guessVal =  new Guess(Guess.GuessType.Person, "", guessedPerson);
@@ -80,7 +80,10 @@ public class RandomGuessPlayer implements Player
 		return guessVal;    	
 	} // end of guess()
 
-	//Provides the guessed answer is correct or not
+	/**
+	 * Provides the guessed answer is correct or not
+	 */
+
 	public boolean answer(Guess currGuess) {
 		//System.out.println("current guess" + currGuess);
 		if(guessVal.getType().toString().equals("Attribute")) {
@@ -106,6 +109,7 @@ public class RandomGuessPlayer implements Player
 		return val;
 	} // end of answer()
 
+	
 	// Receive Answer
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
 		boolean finalAnswer = true;
@@ -121,12 +125,14 @@ public class RandomGuessPlayer implements Player
 		}
 		return finalAnswer;
 	}
+	
 	//Randomly select chosen person
 	public String playerRandSelection() {
 		String randomPerson;
 		randomPerson = (String) p.map.keySet().toArray()[new Random().nextInt(p.map.keySet().toArray().length)];
 		return randomPerson;
 	}
+	
 	// Select the input randomly at any point of game
 	public String randomInput() {
 		String randomAttribute ;
@@ -145,7 +151,11 @@ public class RandomGuessPlayer implements Player
 		S = attributeRandom.concat(" " + valueRandom);
 		return S;	
 	}
-	//Eliminate player1 data with each round
+	
+	
+	/**
+	 * This method eliminate player1 data with each round
+	 */
 	public void player1Status() {
 		Iterator<Map.Entry<String,Collection<String>>> iter = mapPlayer1.entrySet().iterator(); //Iterator for player1 map
 		if(val == true) {	
@@ -166,7 +176,12 @@ public class RandomGuessPlayer implements Player
 		}
 		size = mapPlayer1.size();
 	}
-	//Eliminate player2 data with each round
+	
+	
+	/**
+	 * This method eliminate player2 data with each round
+	 */	
+	
 	public void player2Status() {
 		Iterator<Map.Entry<String,Collection<String>>> iter = mapPlayer2.entrySet().iterator(); //Iterator for player2 map
 		if(val == true){

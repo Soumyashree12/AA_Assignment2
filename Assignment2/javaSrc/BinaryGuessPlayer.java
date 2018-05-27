@@ -44,16 +44,25 @@ public class BinaryGuessPlayer implements Player
 
 	}
 
+	/**
+	 * CONSTRUCTOR
+	 * 
+	 * @param gameFilename  loads the game file
+	 * @param chosenName  Define the chosen name  
+	 * @throws IOException  
+	 */
 	public BinaryGuessPlayer(String gameFilename, String chosenName)
-			throws IOException
-	{
+			throws IOException{
 		p.personData(gameFilename);
 		this.chosenName = chosenName;
 		bmapPlayer1.putAll(p.map); // Assigning the whole person data to player1
 		bmapPlayer2.putAll(p.map); //Assigning the whole person data to player2
 	} // end of BinaryGuessPlayer()
 
-
+	/**
+	 * This method guess the attribute type, value type 
+	 * and Person type
+	 */
 	public Guess guess() {
 		if(bsize !=1) {
 			rg.guessVal = new Guess(Guess.GuessType.Attribute, value,"");
@@ -64,7 +73,7 @@ public class BinaryGuessPlayer implements Player
 		return rg.guessVal;
 	} // end of guess()
 
-	//Guess the correct answer
+	//This method Guess the correct answer
 	public boolean answer(Guess currGuess) {
 		if(rg.guessVal.getType().toString().equals("Attribute")) {
 			List<String> list = new ArrayList<String>(p.map.get(chosenName));
@@ -174,13 +183,13 @@ public class BinaryGuessPlayer implements Player
 		int bmapSize = map.size()/2;
 		int inc = bmapSize+1;
 		int dec = bmapSize-1;
-		
+
 		/*
-		* When bmapsize is present then it will divide the dataset based on it
-		* But if it does not present then it will either go for the nearest one
+		 * When bmapsize is present then it will divide the dataset based on it
+		 * But if it does not present then it will either go for the nearest one
 		 *either increasing or decreasing to nearest value 
 		 */
-		
+
 		while(bmapSize!=0) {
 			if(bcountMatrix.contains(bmapSize)) {
 				value = p.dataset.get(bcountMatrix.indexOf(bmapSize));
@@ -199,7 +208,8 @@ public class BinaryGuessPlayer implements Player
 		}
 		return value;
 	}
-	
+
+
 	public ArrayList<Integer> countList(Map<String,Collection<String>> bmap) {
 
 		//Store the count of each attribute repetition in another arraylist
@@ -214,7 +224,7 @@ public class BinaryGuessPlayer implements Player
 			bcountMatrix.add(number);
 		}  
 		//End of storing count of each attribute in countMatrix
-			
+
 		return bcountMatrix;
 	}
 
